@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="App offline para remover metadados (EXIF, propriedades de documentos e tags de mídia). Licença vitalícia + 12 meses de suporte." />
+  <title>LimpaDados — Limpador de Metadados Offline</title>
+  <style>
+    :root{
+      --bg:#0b0c0f;
+      --text:#e9e9ee;
+      --muted:#a7abb7;
+      --line:rgba(255,255,255,.10);
+      --accent:#ffffff;
+      --shadow: 0 20px 60px rgba(0,0,0,.55);
+      --radius:18px;
+      --max: 980px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 20% -10%, rgba(255,255,255,.10), transparent 60%),
+                  radial-gradient(900px 500px at 100% 0%, rgba(255,255,255,.07), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:28px 18px 60px}
+    header{
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      padding:10px 0 26px;
+    }
+    .brand{
+      font-weight:700;
+      font-size:14px;
+      letter-spacing:.2px;
+      text-decoration:none;
+      color:var(--text);
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid transparent;
+    }
+    .brand:hover{border-color:var(--line)}
+    nav{display:flex; gap:14px; flex-wrap:wrap}
+    nav a{
+      text-decoration:none; color:var(--muted);
+      padding:8px 10px; border-radius:12px;
+      border:1px solid transparent;
+    }
+    nav a:hover{border-color:var(--line); color:var(--text)}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 860px){ .hero{grid-template-columns:1fr} }
+    .card{
+      background: rgba(18,20,26,.75);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+    .hero-main{padding:26px 24px}
+    .kicker{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px; color:var(--muted);
+      padding:8px 10px; border:1px solid var(--line);
+      border-radius:999px;
+      background: rgba(255,255,255,.04);
+    }
+    h1{
+      margin:14px 0 10px;
+      font-size: 40px;
+      line-height:1.1;
+      letter-spacing:-.6px;
+    }
+    @media (max-width: 520px){ h1{font-size:32px} }
+    .lead{color:var(--muted); font-size:16px; margin:0 0 18px}
+    .cta-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      text-decoration:none;
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      font-weight:600;
+      min-width: 190px;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover{background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.18)}
+    .btn:active{transform: translateY(1px)}
+    .btn.primary{
+      background: var(--accent);
+      color:#0b0c0f;
+      border-color: rgba(255,255,255,.35);
+    }
+    .btn.primary:hover{background: rgba(255,255,255,.92)}
+    .meta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:14px;
+      color:var(--muted); font-size:13px;
+    }
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      padding:8px 10px;
+      border-radius:999px;
+    }
+    .hero-side{padding:22px 20px}
+    .price{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:10px;
+      padding-bottom:14px; border-bottom:1px solid var(--line);
+      margin-bottom:14px;
+    }
+    .price strong{font-size:34px; letter-spacing:-.4px}
+    .price span{color:var(--muted); font-size:13px}
+    .list{margin:0; padding-left:18px; color:var(--muted)}
+    .list li{margin:8px 0}
+    .section{margin-top:18px; padding:22px 22px;}
+    h2{margin:0 0 10px; font-size:18px; letter-spacing:-.2px}
+    .grid{display:grid; grid-template-columns: 1fr 1fr; gap:14px;}
+    @media (max-width: 860px){ .grid{grid-template-columns:1fr} }
+    .box{
+      padding:16px 16px;
+      border-radius: 16px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+    }
+    .box h3{margin:0 0 6px; font-size:14px}
+    .box p{margin:0; color:var(--muted); font-size:14px}
+    .formats{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px; margin-top:12px;}
+    @media (max-width: 640px){ .formats{grid-template-columns:1fr} }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      white-space: nowrap;
+    }
+    footer{
+      margin-top:18px;
+      color: var(--muted);
+      font-size: 12.5px;
+      padding-top:18px;
+      border-top: 1px solid var(--line);
+    }
+    .note{margin-top:10px; color: var(--muted); font-size: 13px;}
+    .small{font-size:12px; color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="#top" aria-label="Início">LimpaDados</a>
+
+      <nav>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#formatos">Formatos</a>
+        <a href="#demo-vs-full">Demo vs Full</a>
+        <a href="#comprar">Comprar</a>
+      </nav>
+    </header>
+
+    <main id="top" class="hero">
+      <section class="card hero-main">
+        <div class="kicker">🔒 Offline • Sem upload • Privacidade</div>
+        <h1>Remova metadados ocultos antes de compartilhar seus arquivos.</h1>
+        <p class="lead">
+          O <b>LimpaDados</b> é um aplicativo <b>100% offline</b> para limpar informações como EXIF (GPS/localização),
+          autor/empresa em documentos e tags de mídia. Seus arquivos ficam no seu computador — <b>nada é enviado para servidor</b>.
+        </p>
+
+        <div class="cta-row" id="comprar">
+          <a class="btn primary" href="https://pag.ae/81yvErJcP" target="_blank" rel="noopener noreferrer">
+            🛒 Comprar — R$ 40
+          </a>
+
+          <a class="btn" href="https://github.com/navegantesjr/Limpadados/releases/download/metadados/LimpaDados_Demo_Setup.exe">
+            ⬇️ Baixar Demo (15 usos)
+          </a>
+        </div>
+
+        <div class="meta">
+          <span class="pill">Licença vitalícia</span>
+          <span class="pill">Suporte por 12 meses</span>
+          <span class="pill">Desenvolvedor individual • Software autoral</span>
+        </div>
+
+        <p class="note">
+          <b>Importante:</b> o app remove metadados comuns para reduzir exposição e aumentar privacidade.
+          Privacidade total depende também de como e onde você compartilha os arquivos.
+        </p>
+      </section>
+
+      <aside class="card hero-side">
+        <div class="price">
+          <div>
+            <strong>R$ 40</strong><br />
+            <span>Licença vitalícia + 12 meses de suporte</span>
+          </div>
+          <span class="small">PagBank (vários meios)</span>
+        </div>
+
+        <h2>O que ele faz</h2>
+        <ul class="list">
+          <li>Remove <b>EXIF</b> de imagens (GPS, modelo da câmera, datas etc.).</li>
+          <li>Remove metadados de <b>PDF/DOCX</b> (autor, empresa, revisões, propriedades).</li>
+          <li>Remove propriedades internas de <b>XLSX/PPTX</b>.</li>
+          <li>Remove tags de <b>áudio/vídeo</b> (título, artista, álbum, comentários).</li>
+        </ul>
+
+        <p class="note">
+          Produto <b>autoral</b>, feito por um <b>desenvolvedor individual</b>. Não é crack e não é revenda.
+        </p>
+      </aside>
+    </main>
+
+    <section id="como-funciona" class="card section">
+      <h2>Como funciona</h2>
+      <div class="grid">
+        <div class="box">
+          <h3>1) Selecione o arquivo</h3>
+          <p>Escolha o arquivo que você vai enviar/postar/compartilhar.</p>
+        </div>
+        <div class="box">
+          <h3>2) Limpe os metadados</h3>
+          <p>O app processa tudo localmente — sem upload, sem nuvem.</p>
+        </div>
+        <div class="box">
+          <h3>3) Salve a cópia limpa</h3>
+          <p>Gera uma <b>cópia sem metadados</b> e mantém o original intacto.</p>
+        </div>
+        <div class="box">
+          <h3>Offline de verdade</h3>
+          <p>Só precisa de internet para baixar. Depois, roda offline.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="formatos" class="card section">
+      <h2>Formatos suportados</h2>
+      <p class="small">Principais extensões compatíveis:</p>
+
+      <div class="formats">
+        <div class="box">
+          <h3>🖼️ Imagens</h3>
+          <p>
+            <code>.jpg</code> <code>.jpeg</code> <code>.png</code> <code>.tiff</code> <code>.webp</code>
+          </p>
+        </div>
+
+        <div class="box">
+          <h3>📄 Documentos</h3>
+          <p>
+            <code>.pdf</code> <code>.docx</code>
+          </p>
+        </div>
+
+        <div class="box">
+          <h3>📊 Planilhas e Apresentações</h3>
+          <p>
+            <code>.xlsx</code> <code>.pptx</code>
+          </p>
+        </div>
+
+        <div class="box">
+          <h3>🎬 Áudio e Vídeo</h3>
+          <p>
+            <code>.mp3</code> <code>.mp4</code> <code>.m4a</code> <code>.m4v</code> <code>.flac</code> <code>.ogg</code> <code>.wav</code>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo-vs-full" class="card section">
+      <h2>Demo vs Full</h2>
+      <div class="grid">
+        <div class="box">
+          <h3>Demo (GitHub)</h3>
+          <p>
+            ✅ Funciona offline<br />
+            ✅ Mesmos tipos de limpeza<br />
+            ⚠️ <b>Limite: 15 usos no total</b> (cota única, não renova por dia)
+          </p>
+          <p class="small" style="margin-top:10px;">
+            Download direto:
+            <a href="https://github.com/navegantesjr/Limpadados/releases/download/metadados/LimpaDados_Demo_Setup.exe">
+              LimpaDados_Demo_Setup.exe
+            </a>
+          </p>
+        </div>
+
+        <div class="box">
+          <h3>Full (Licença vitalícia)</h3>
+          <p>
+            ✅ Uso ilimitado<br />
+            ✅ Licença vitalícia<br />
+            ✅ <b>Suporte por 12 meses</b><br />
+            ✅ Checkout PagBank (vários meios)
+          </p>
+          <p style="margin-top:10px;">
+            <a class="btn primary" href="https://pag.ae/81yvErJcP" target="_blank" rel="noopener noreferrer">
+              Comprar — R$ 40
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div><b>Software autoral</b> desenvolvido por um único desenvolvedor.</div>
+    </footer>
+  </div>
+</body>
+</html>
