@@ -155,6 +155,26 @@
     }
     .note{margin-top:10px; color: var(--muted); font-size: 13px;}
     .small{font-size:12px; color:var(--muted)}
+    .highlight{
+      margin-top:14px;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+    }
+    .highlight b{color:var(--text)}
+    .mail{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:12px;
+      color: var(--text);
+      text-decoration:none;
+    }
   </style>
 </head>
 <body>
@@ -189,6 +209,12 @@
           </a>
         </div>
 
+        <div class="highlight" role="note" aria-label="Entrega do produto">
+          <b>Entrega da versão Full:</b> após a compra, envie o <b>comprovante</b> para
+          <a class="mail" href="mailto:josenavegantesjr@gmail.com?subject=LimpaDados%20-%20Comprovante%20de%20Compra">josenavegantesjr@gmail.com</a>
+          para receber o link de download + licença.
+        </div>
+
         <div class="meta">
           <span class="pill">Licença vitalícia</span>
           <span class="pill">Suporte por 12 meses</span>
@@ -207,7 +233,7 @@
             <strong>R$ 40</strong><br />
             <span>Licença vitalícia + 12 meses de suporte</span>
           </div>
-          <span class="small">PagBank (vários meios)</span>
+          <span class="small">Checkout PagBank (vários meios)</span>
         </div>
 
         <h2>O que ele faz</h2>
@@ -311,6 +337,10 @@
             <a class="btn primary" href="https://pag.ae/81yvErJcP" target="_blank" rel="noopener noreferrer">
               Comprar — R$ 40
             </a>
+          </p>
+          <p class="small">
+            Após a compra, envie o comprovante para
+            <a class="mail" href="mailto:josenavegantesjr@gmail.com?subject=LimpaDados%20-%20Comprovante%20de%20Compra">josenavegantesjr@gmail.com</a>.
           </p>
         </div>
       </div>
